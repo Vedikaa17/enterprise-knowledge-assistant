@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enterprise Knowledge Assistant</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+        body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #cfe0f5 0%, #a8c5e8 50%, #8fb3dc 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Floating blurred orbs - jaise glassmorphism demo images mein hote hain */
+    body::before,
+    body::after {
+        content: "";
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(2px);
+        z-index: 0;
+    }
+
+    body::before {
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle at 30% 30%, #a8cbf0, #5a8fc7);
+        top: 10%;
+        left: 8%;
+        box-shadow: 0 20px 50px rgba(90, 143, 199, 0.5);
+    }
+
+    body::after {
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(circle at 30% 30%, #a8cbf0, #5a8fc7);
+        bottom: 8%;
+        right: 6%;
+        box-shadow: 0 20px 50px rgba(90, 143, 199, 0.5);
+    }
+
+    /* Glassmorphism card */
+        .container {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        max-width: 700px;
+        width: 100%;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        padding: 40px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .header-icon {
+        font-size: 32px;
+    }
+
+        h1 {
+        font-size: 26px;
+        color: #1e3a5f;
+        text-shadow: none;
+    }
+        .subtitle {
+        color: #09192a;
+        margin-bottom: 24px;
+        font-size: 14px;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+        flex: 1;
+        padding: 14px 16px;
+        font-size: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 10px;
+        outline: none;
+        background: rgba(255, 255, 255, 0.2);
+        color: #1e3a5f;
+        backdrop-filter: blur(6px);
+    }
+
+            input[type="text"]::placeholder {
+        color: #6b8bab;
+    }
+
+    input[type="text"]:focus {
+        border-color: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.28);
+    }
+
+    button {
+        padding: 14px 28px;
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a2e;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.15s, background 0.15s;
+    }
+
+    button:hover:not(:disabled) {
+        transform: translateY(-2px);
+        background: #ffffff;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    #answer-box {
+        min-height: 80px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(10px);
+        border-left: 4px solid rgba(255, 255, 255, 0.7);
+        border-radius: 12px;
+        line-height: 1.6;
+        color: #1e3a5f;
+        font-size: 15px;
+    }
+
+        .placeholder-text {
+        color: #3d5875;
+        font-style: italic;
+    }
+
+    .source-tag {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #4f46e5;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .error-text {
+        color: #fca5a5;
+    }
+
+    .loading-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+
+    .spinner {
+        width: 18px;
+        height: 18px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top: 3px solid #ffffff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .timer {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+</style>
+</head>
+<div style="max-width: 700px; width: 100%;">
+    <a href="index.html" style="display: inline-block; margin-bottom: 12px; color: #1e3a5f; text-decoration: none; font-weight: 600;">← Back to Home</a>
+    <div class="container">
+    <div class="header">
+        <span class="header-icon">📘</span>
+        <h1>Enterprise Knowledge Assistant</h1>
+    </div>
+    <p class="subtitle">Ask a question about company policies — answers are grounded in your documents.</p>
+
+    <div class="input-group">
+        <input type="text" id="question-input" placeholder="e.g., How many leave days do employees get?">
+        <button id="ask-btn" onclick="askQuestion()">Ask</button>
+    </div>
+
+    <div id="answer-box">
+        <span class="placeholder-text">Your answer will appear here...</span>
+    </div>
+</div>
+</div>
+
+<script>
+    const input = document.getElementById("question-input");
+    const answerBox = document.getElementById("answer-box");
+    const askBtn = document.getElementById("ask-btn");
+
+    input.addEventListener("keypress", function (e) {
+        if (e.key === "Enter") askQuestion();
+    });
+
+    function formatAnswer(text) {
+        let formatted = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+        formatted = formatted.replace(/\n/g, "<br>");
+        return formatted;
+    }
+
+    async function askQuestion() {
+        const question = input.value.trim();
+
+        if (!question) {
+            answerBox.innerHTML = '<span class="error-text">Please type a question first.</span>';
+            return;
+        }
+
+        askBtn.disabled = true;
+        let seconds = 0;
+        answerBox.innerHTML = `
+            <div class="loading-wrap">
+                <div class="spinner"></div>
+                <span>Thinking... <span class="timer" id="timer">0s</span></span>
+            </div>`;
+
+        const timerInterval = setInterval(() => {
+            seconds++;
+            const timerEl = document.getElementById("timer");
+            if (timerEl) timerEl.innerText = seconds + "s";
+        }, 1000);
+
+        try {
+            const response = await fetch("http://127.0.0.1:8000/ask", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: question })
+            });
+
+            const data = await response.json();
+
+            let answerText = data.answer;
+            let sourceMatch = answerText.match(/\(Source:.*?\)/);
+            let sourceTag = "";
+
+            if (sourceMatch) {
+                sourceTag = `<div class="source-tag">${sourceMatch[0]}</div>`;
+                answerText = answerText.replace(sourceMatch[0], "").trim();
+            }
+
+            answerBox.innerHTML = formatAnswer(answerText) + sourceTag;
+
+        } catch (error) {
+            answerBox.innerHTML = '<span class="error-text">⚠️ Could not connect to the backend. Is the server running?</span>';
+            console.error(error);
+        } finally {
+            clearInterval(timerInterval);
+            askBtn.disabled = false;
+        }
+    }
+</script>
+</body>
+</html>

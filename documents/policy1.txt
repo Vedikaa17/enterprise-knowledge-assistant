@@ -1,0 +1,9 @@
+IT Support Policy
+
+All employees must reset their passwords every 90 days. Password must contain at least 8 characters, one uppercase letter, one number, and one special character.
+
+If an employee forgets their password, they should contact the IT helpdesk at extension 4455 or email support@company.com.
+
+Laptops issued to employees must be returned within 5 working days of resignation or termination. Employees are responsible for any damage caused due to negligence during the usage period.
+
+VPN access is mandatory for all employees working remotely. VPN credentials are issued by the IT department and must not be shared with anyone outside the organization.

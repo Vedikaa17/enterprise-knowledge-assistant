@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Enterprise Knowledge Assistant</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #cfe0f5 0%, #a8c5e8 50%, #8fb3dc 100%);
+        color: #1e3a5f;
+        position: relative;
+        overflow-x: hidden;
+    }
+
+    body::before, body::after {
+        content: "";
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(2px);
+        z-index: 0;
+    }
+
+    body::before {
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle at 30% 30%, #a8cbf0, #5a8fc7);
+        top: 8%;
+        left: 6%;
+        box-shadow: 0 20px 50px rgba(90, 143, 199, 0.5);
+    }
+
+    body::after {
+        width: 280px;
+        height: 280px;
+        background: radial-gradient(circle at 30% 30%, #a8cbf0, #5a8fc7);
+        bottom: 8%;
+        right: 6%;
+        box-shadow: 0 20px 50px rgba(90, 143, 199, 0.5);
+    }
+
+    .hero {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 80px 30px 60px;
+        text-align: center;
+    }
+
+    .hero-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .hero h1 {
+        font-size: 40px;
+        margin-bottom: 16px;
+    }
+
+    .hero p {
+        font-size: 17px;
+        color: #3d5875;
+        max-width: 600px;
+        margin: 0 auto 32px;
+        line-height: 1.6;
+    }
+
+    .cta-btn {
+        display: inline-block;
+        padding: 16px 36px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background: #1e3a5f;
+        border-radius: 10px;
+        text-decoration: none;
+        transition: transform 0.15s, background 0.15s;
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-2px);
+        background: #16304f;
+    }
+
+    .features {
+        position: relative;
+        z-index: 1;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px 30px 80px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.35);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 16px;
+        padding: 28px;
+    }
+
+    .feature-card .icon {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+
+    .feature-card h3 {
+        font-size: 17px;
+        margin-bottom: 8px;
+    }
+
+    .feature-card p {
+        font-size: 14px;
+        color: #3d5875;
+        line-height: 1.5;
+    }
+
+    .how-it-works {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 30px 80px;
+    }
+
+    .how-it-works h2 {
+        text-align: center;
+        margin-bottom: 32px;
+        font-size: 26px;
+    }
+
+    .step {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 20px;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        padding: 18px 22px;
+    }
+
+    .step-number {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        background: #1e3a5f;
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .step p {
+        font-size: 14px;
+        color: #3d5875;
+        line-height: 1.5;
+    }
+</style>
+</head>
+<body>
+
+    <div class="hero">
+        <div class="hero-icon">📘</div>
+        <h1>Enterprise Knowledge Assistant</h1>
+        <p>
+            Ask questions in plain English and get instant answers pulled directly
+            from your company documents — with the exact source cited, every time.
+            No more digging through PDFs and policy files.
+        </p>
+        <a href="app.html" class="cta-btn">Try it now →</a>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <div class="icon">🔍</div>
+            <h3>Smart Search</h3>
+            <p>Understands the meaning behind your question, not just keywords — so you find the right answer even if you don't know the exact wording.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📎</div>
+            <h3>Cited Answers</h3>
+            <p>Every answer tells you exactly which document it came from, so you can trust and verify the information.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">⚡</div>
+            <h3>Instant Access</h3>
+            <p>No need to read entire policy documents — get a direct answer to your specific question in seconds.</p>
+        </div>
+    </div>
+
+    <div class="how-it-works">
+        <h2>How it works</h2>
+        <div class="step">
+            <div class="step-number">1</div>
+            <p>Type your question about company policies — HR, IT, expenses, or product support.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <p>The assistant searches through internal documents to find the most relevant information.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <p>You get a clear answer, along with the exact document it was sourced from.</p>
+        </div>
+    </div>
+
+</body>
+</html>

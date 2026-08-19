@@ -1,0 +1,16 @@
+Product Support FAQ
+
+Q: How do I reset my account password?
+A: Go to the login page and click on "Forgot Password". You will receive a reset link on your registered email within 5 minutes.
+
+Q: What should I do if the application crashes frequently?
+A: First, clear the application cache from Settings > Storage. If the issue persists, uninstall and reinstall the latest version from the official website.
+
+Q: How can I upgrade my subscription plan?
+A: Navigate to Account Settings > Billing, select your desired plan, and confirm payment. The upgrade takes effect immediately after successful payment.
+
+Q: Is customer support available 24/7?
+A: Standard support is available Monday to Friday, 9 AM to 7 PM. Premium plan users get access to 24/7 priority support via live chat.
+
+Q: How do I export my data before cancelling my subscription?
+A: Go to Settings > Data Export, select the format (CSV or PDF), and click Export. Data is retained for 30 days after cancellation before permanent deletion.
