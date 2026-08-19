@@ -6,6 +6,7 @@ import chromadb
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # Step 1: Setup - API key, Gemini client, Chroma connection
 load_dotenv()
@@ -16,6 +17,7 @@ collection = chroma_client.get_or_create_collection(name="enterprise_docs")
 
 # Step 2: FastAPI app banao
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -27,6 +29,61 @@ app.add_middleware(
 # Step 3: Request body ka structure define karo
 class QuestionRequest(BaseModel):
     question: str
+
+
+def embed_documents_if_needed():
+    """Agar Chroma collection khali hai, to documents ko chunk + embed karke store karo."""
+    existing_count = collection.count()
+
+    if existing_count > 0:
+        print(f"Collection already has {existing_count} items. Skipping embedding.")
+        return
+
+    print("Collection is empty. Embedding documents now...")
+
+    documents_folder = "documents"
+    all_texts = []
+
+    for filename in os.listdir(documents_folder):
+        if filename.endswith(".txt"):
+            filepath = os.path.join(documents_folder, filename)
+            with open(filepath, "r", encoding="utf-8") as f:
+                text = f.read()
+            all_texts.append({"filename": filename, "content": text})
+
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+
+    all_chunks = []
+    for doc in all_texts:
+        chunks = text_splitter.split_text(doc["content"])
+        for chunk in chunks:
+            all_chunks.append({"source": doc["filename"], "text": chunk})
+
+    for i, chunk in enumerate(all_chunks):
+        result = client.models.embed_content(
+            model="gemini-embedding-2",
+            contents=chunk["text"],
+            config=types.EmbedContentConfig(
+                task_type="RETRIEVAL_DOCUMENT",
+                output_dimensionality=768
+            )
+        )
+        embedding = result.embeddings[0].values
+
+        collection.add(
+            ids=[f"chunk_{i}"],
+            embeddings=[embedding],
+            documents=[chunk["text"]],
+            metadatas=[{"source": chunk["source"]}]
+        )
+
+    print(f"Embedded and stored {len(all_chunks)} chunks.")
+
+
+# Step 4: Startup event - server start hote hi ye chalega
+@app.on_event("startup")
+def on_startup():
+    embed_documents_if_needed()
 
 
 def retrieve_relevant_chunks(query, top_k=3):
@@ -73,13 +130,13 @@ Answer:"""
     return prompt
 
 
-# Step 4: Root endpoint (health check)
+# Step 5: Root endpoint (health check)
 @app.get("/")
 def read_root():
     return {"message": "Enterprise Knowledge Assistant is running!"}
 
 
-# Step 5: Actual /ask endpoint
+# Step 6: Actual /ask endpoint
 @app.post("/ask")
 def ask_question(request: QuestionRequest):
     query = request.question
